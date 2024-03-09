@@ -3,7 +3,7 @@ import telebot
 from bitcoinrpc.authproxy import AuthServiceProxy, JSONRPCException
 TOKEN = "7101889129:AAEsWnlZqc8k4SHnv2YO1NYSqpxilr5YfGc"
 rpc_user = 'kzcashrpc'
-rpc_password = ''
+rpc_password = '8WAF6HgJZJXgdvXAY9xCdVty'
 
 rpc_connection = AuthServiceProxy(f'http://{rpc_user}:{rpc_password}@127.0.0.1:8276')
 
