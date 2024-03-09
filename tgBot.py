@@ -10,18 +10,6 @@ rpc_connection = AuthServiceProxy(f'http://{rpc_user}:{rpc_password}@127.0.0.1:8
 bot_token = TOKEN
 bot = telebot.TeleBot(bot_token)
 
-def addressBalance(args):
-    inputs = rpc_connection.listunspent(0, 9999, args)
-    balance = 0
-    if len(inputs) == 0:
-        balance += 0
-    elif len(inputs) == 1:
-        balance += inputs[0].get("amount")
-    else:
-        for i in (0, len(inputs)-1):
-            balance += inputs[i].get("amount")
-    return balance
-
 @bot.message_handler(commands=['getnewaddress'])
 def get_new_address(message):
     new_address = rpc_connection.getnewaddress()
@@ -64,19 +52,6 @@ def send_coins(message):
     receivedHex = signTransaction.get("hex")
     txid = rpc_connection.sendrawtransaction(receivedHex)
     bot.reply_to(message, f"Монеты отправлены получателю! ID транзакции: {txid}")
-
-@bot.message_handler(commands=['getaddressbalance'])
-def get_address_balance(message):
-    args = message.text.split()[1:]
-    if len(args) != 1:
-        bot.reply_to(message, "Шаблон: /getaddressbalance <адрес кошелька>")
-        return
-    try:
-        balance = addressBalance(args)
-    except JSONRPCException:
-        bot.reply_to(message, f"Неправильный адрес кошелька ")
-        return
-    bot.reply_to(message, f"Баланс адреса: {balance} KZC")
 
 
 @bot.message_handler(content_types=['text'])
